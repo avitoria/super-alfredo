@@ -6,24 +6,25 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class Producto {
-	
+
 	private int id;
-	
+
 	@NotBlank
-	@Size( min = 3, max = 100, message = "La longtitud de ser entre 3 y 100 caracteres")
+	@Size(min = 3, max = 100, message = "La longtitud de ser entre 3 y 100 caracteres")
 	private String nombre;
-	
-	@NotBlank ( message = "Escribe la url de la imagen")
+
+	@NotBlank(message = "Escribe la url de la imagen")
 	private String imagen;
-	
-	@Min( value = 0, message = "Debe ser positivo")
+
+	@Min(value = 0, message = "Debe ser positivo")
 	private float precio;
-	//TODO usuario
-	
-	
+	// TODO usuario
+
 	private Categoria categoria;
-	
-	
+
+	// Usuario que ha creado el producto
+	private Usuario usuario;
+
 	public Producto() {
 		super();
 		this.id = 0;
@@ -31,6 +32,7 @@ public class Producto {
 		this.precio = 0;
 		this.imagen = "https://picsum.photos/100/100";
 		this.categoria = new Categoria();
+		this.usuario = new Usuario();
 	}
 
 	public Producto(String nombre) {
@@ -54,7 +56,6 @@ public class Producto {
 		this.nombre = nombre;
 	}
 
-
 	public String getImagen() {
 		return imagen;
 	}
@@ -71,7 +72,6 @@ public class Producto {
 		this.precio = precio;
 	}
 
-	
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -79,13 +79,19 @@ public class Producto {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
-		
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", imagen=" + imagen + ", precio=" + precio
-				+ ", categoria=" + categoria + "]";
+				+ ", categoria=" + categoria + ", usuario=" + usuario + "]";
 	}
 
 	@Override
@@ -124,10 +130,5 @@ public class Producto {
 			return false;
 		return true;
 	}
-
-	
-
-	
-	
 
 }

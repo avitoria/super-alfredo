@@ -7,12 +7,17 @@ public class Categoria {
 	private int id;
 	private String nombre;
 	private ArrayList<Producto> productos;
-	
+
 	public Categoria() {
 		super();
 		this.id = 0;
 		this.nombre = "";
 		this.productos = new ArrayList<Producto>();
+	}
+
+	public Categoria(int id) {
+		this();
+		this.id = id;
 	}
 
 	public int getId() {
@@ -31,8 +36,6 @@ public class Categoria {
 		this.nombre = nombre;
 	}
 
-	
-	
 	public ArrayList<Producto> getProductos() {
 		return productos;
 	}
@@ -45,6 +48,5 @@ public class Categoria {
 	public String toString() {
 		return "Categoria [id=" + id + ", nombre=" + nombre + "]";
 	}
-	
-	
+
 }

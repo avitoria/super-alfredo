@@ -49,20 +49,16 @@ public class ProductoDAOImpl implements ProductoDAO {
 																									// id de la
 																									// categoria
 			" ORDER BY p.id DESC LIMIT ? ; ";
-	
-	
-	private final String SQL_GET_BY_USUARIO_PRODUCTO_VALIDADO =
-	                                            "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n" + 
-												"FROM producto p , categoria c  \n" + 
-												"WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL AND p.id_usuario = ? \n" + 
-												"ORDER BY p.id DESC LIMIT 500; ";
-	
-	private final String SQL_GET_BY_USUARIO_PRODUCTO_SIN_VALIDAR =
-									            "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n" + 
-												"FROM producto p , categoria c  \n" + 
-												"WHERE p.id_categoria  = c.id AND fecha_validado IS NULL AND p.id_usuario = ? \n" + 
-												"ORDER BY p.id DESC LIMIT 500; ";
-	
+
+	private final String SQL_GET_BY_USUARIO_PRODUCTO_VALIDADO = "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n"
+			+ "FROM producto p , categoria c  \n"
+			+ "WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL AND p.id_usuario = ? \n"
+			+ "ORDER BY p.id DESC LIMIT 500; ";
+
+	private final String SQL_GET_BY_USUARIO_PRODUCTO_SIN_VALIDAR = "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n"
+			+ "FROM producto p , categoria c  \n"
+			+ "WHERE p.id_categoria  = c.id AND fecha_validado IS NULL AND p.id_usuario = ? \n"
+			+ "ORDER BY p.id DESC LIMIT 500; ";
 
 	private final String SQL_GET_BY_ID = " SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
@@ -113,24 +109,23 @@ public class ProductoDAOImpl implements ProductoDAO {
 	public ArrayList<Producto> getAllByUser(int idUsuario, boolean isValidado) {
 		ArrayList<Producto> registros = new ArrayList<Producto>();
 
-		String sql = ( isValidado ) ? SQL_GET_BY_USUARIO_PRODUCTO_VALIDADO :  SQL_GET_BY_USUARIO_PRODUCTO_SIN_VALIDAR ;
-		
+		String sql = (isValidado) ? SQL_GET_BY_USUARIO_PRODUCTO_VALIDADO : SQL_GET_BY_USUARIO_PRODUCTO_SIN_VALIDAR;
+
 		try (Connection conexion = ConnectionManager.getConnection();
-				PreparedStatement pst = conexion.prepareStatement(sql);
-			) {
-			
-			// TODO mirar como hacerlo con una SQL,   "IS NOT NULL" o "IS NULL"
-			// pst.setBoolean(1, isValidado); // me sustitulle con un 1 o 0
-			
+				PreparedStatement pst = conexion.prepareStatement(sql);) {
+
+			// TODO mirar como hacerlo con una SQL, "IS NOT NULL" o "IS NULL"
+			// pst.setBoolean(1, isValidado); // me sustituye con un 1 o 0
+
 			pst.setInt(1, idUsuario);
-			
+
 			LOG.debug(pst);
-			
-			try( ResultSet rs = pst.executeQuery() ){				
-				while (rs.next()) {	
-					registros.add(mapper(rs));	
+
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					registros.add(mapper(rs));
 				}
-			}	
+			}
 
 		} catch (Exception e) {
 			LOG.error(e);
