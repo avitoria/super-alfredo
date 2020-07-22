@@ -12,6 +12,7 @@ import com.ipartek.formacion.modelo.ConnectionManager;
 import com.ipartek.formacion.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.modelo.pojo.Categoria;
 import com.ipartek.formacion.modelo.pojo.Producto;
+import com.ipartek.formacion.modelo.pojo.ResumenUsuario;
 
 public class ProductoDAOImpl implements ProductoDAO {
 
@@ -32,43 +33,43 @@ public class ProductoDAOImpl implements ProductoDAO {
 	}
 
 	// excuteQuery => ResultSet
-	private final String SQL_GET_ALL = " SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
+	private final String SQL_GET_ALL = "SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
 			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL "
-			+ " ORDER BY p.id DESC LIMIT 500; ";
+			+ " ORDER BY p.id DESC LIMIT 500";
 
-	private final String SQL_GET_LAST = " SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
+	private final String SQL_GET_LAST = "SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
 			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL "
-			+ " ORDER BY p.id DESC LIMIT ? ; ";
+			+ " ORDER BY p.id DESC LIMIT ?";
 
-	private final String SQL_GET_BY_CATEGORIA = " SELECT " + "	 p.id     'producto_id', "
+	private final String SQL_GET_BY_CATEGORIA = "SELECT " + "	 p.id     'producto_id', "
 			+ "	 p.nombre 'producto_nombre', " + "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', "
 			+ "	 c.nombre 'categoria_nombre'	" + " FROM producto p , categoria c "
-			+ " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL " + " AND c.id = ? " + // filtramos por el
-																									// id de la
-																									// categoria
-			" ORDER BY p.id DESC LIMIT ? ; ";
+			+ " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL " + " AND c.id = ? "
+			+ " ORDER BY p.id DESC LIMIT ?";
 
 	private final String SQL_GET_BY_USUARIO_PRODUCTO_VALIDADO = "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n"
 			+ "FROM producto p , categoria c  \n"
 			+ "WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL AND p.id_usuario = ? \n"
-			+ "ORDER BY p.id DESC LIMIT 500; ";
+			+ "ORDER BY p.id DESC LIMIT 500";
 
 	private final String SQL_GET_BY_USUARIO_PRODUCTO_SIN_VALIDAR = "SELECT 	 p.id     'producto_id', 	 p.nombre 'producto_nombre', 	 precio, 	 imagen, 	 c.id     'categoria_id', 	 c.nombre 'categoria_nombre'	 \n"
 			+ "FROM producto p , categoria c  \n"
 			+ "WHERE p.id_categoria  = c.id AND fecha_validado IS NULL AND p.id_usuario = ? \n"
-			+ "ORDER BY p.id DESC LIMIT 500; ";
+			+ "ORDER BY p.id DESC LIMIT 500";
 
-	private final String SQL_GET_BY_ID = " SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
+	private final String SQL_GET_BY_ID = "SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
-			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND p.id = ? ; ";
+			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND p.id = ?";
+
+	private final String SQL_VIEW_RESUMEN_USUARIO = "SELECT id_usuario, aprobados, pendientes FROM v_usuario_productos WHERE id_usuario = ?";
 
 	// excuteUpdate => int numero de filas afectadas
-	private final String SQL_INSERT = " INSERT INTO producto (nombre, imagen, precio , id_usuario, id_categoria ) VALUES ( ? , ?, ? , 1,  ? ) ; ";
-	private final String SQL_UPDATE = " UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ? WHERE id = ? ; ";
+	private final String SQL_INSERT = "INSERT INTO producto (nombre, imagen, precio , id_usuario, id_categoria ) VALUES (?, ?, ?, ?, ?)";
+	private final String SQL_UPDATE = "UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ? WHERE id = ?";
 
-	private final String SQL_DELETE = " DELETE FROM producto WHERE id = ? ; ";
+	private final String SQL_DELETE = "DELETE FROM producto WHERE id = ?";
 
 	@Override
 	public void validar(int id) {
@@ -229,12 +230,13 @@ public class ProductoDAOImpl implements ProductoDAO {
 				PreparedStatement pst = conexion.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
 		) {
-
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getImagen());
 			pst.setFloat(3, pojo.getPrecio());
-			pst.setInt(4, pojo.getCategoria().getId());
+			pst.setInt(4, pojo.getUsuario().getId());
+			pst.setInt(5, pojo.getCategoria().getId());
 			LOG.debug(pst);
+
 			int affectedRows = pst.executeUpdate();
 
 			if (affectedRows == 1) {
@@ -242,18 +244,15 @@ public class ProductoDAOImpl implements ProductoDAO {
 				// conseguir el ID
 
 				try (ResultSet rsKeys = pst.getGeneratedKeys()) {
-
 					if (rsKeys.next()) {
 						int id = rsKeys.getInt(1);
 						pojo.setId(id);
 					}
-
 				}
 
 			} else {
 				throw new Exception("No se ha podido guardar el registro " + pojo);
 			}
-
 		}
 
 		return pojo;
@@ -303,6 +302,33 @@ public class ProductoDAOImpl implements ProductoDAO {
 		p.setCategoria(c);
 
 		return p;
+	}
+
+	@Override
+	public ResumenUsuario getResumenByUsuario(int idUsuario) {
+
+		ResumenUsuario resumen = new ResumenUsuario();
+
+		try (Connection conexion = ConnectionManager.getConnection();
+				PreparedStatement pst = conexion.prepareStatement(SQL_VIEW_RESUMEN_USUARIO);) {
+
+			pst.setInt(1, idUsuario);
+			LOG.debug(pst);
+
+			try (ResultSet rs = pst.executeQuery()) {
+				if (rs.next()) {
+					// mapper de RS al POJO
+					resumen.setIdUsuario(idUsuario);
+					resumen.setAprobados(rs.getInt("aprobados"));
+					resumen.setPendientes(rs.getInt("pendientes"));
+				}
+			}
+
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+
+		return resumen;
 	}
 
 }

@@ -32,25 +32,23 @@ public class ProductosFrontOfficeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String validados = request.getParameter("validados");
 		String titulo = "";
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 
 		try {
+			String validados = request.getParameter("validados");
 
 			Usuario usuarioSession = (Usuario) request.getSession().getAttribute("usuario_login");
 			int idUsuario = usuarioSession.getId();
 
 			if (validados == null) {
-				titulo = "Productos Validados";
+				titulo = "Productos validados";
 				productos = daoProducto.getAllByUser(idUsuario, true);
 
 			} else {
-				titulo = "Productos Pendientes de Validar";
+				titulo = "Productos pendientes de Validar";
 				productos = daoProducto.getAllByUser(idUsuario, false);
 			}
-
-			// productos = daoProducto.getAll();
 
 		} catch (Exception e) {
 			LOG.error(e);

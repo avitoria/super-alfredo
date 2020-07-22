@@ -5,7 +5,7 @@
           auth="Container"
           name="jdbc/super"
           driverClassName="com.mysql.jdbc.Driver"
-          url="jdbc:mysql://localhost:3306/super-alfredo"
+          url="jdbc:mysql://localhost:3306/super_alfredo"
           username="root"
           password="root"
           maxActive="100"

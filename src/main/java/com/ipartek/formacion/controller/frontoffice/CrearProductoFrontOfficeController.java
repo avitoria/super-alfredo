@@ -62,7 +62,6 @@ public class CrearProductoFrontOfficeController extends HttpServlet {
 		String categoriaId = request.getParameter("categoria_id");
 
 		try {
-
 			int id = Integer.parseInt(idParametro);
 			int idCategoria = Integer.parseInt(categoriaId);
 			float precioFloat = Float.parseFloat(precio);
