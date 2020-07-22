@@ -8,12 +8,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import com.ipartek.formacion.controller.Alerta;
+import com.ipartek.formacion.modelo.dao.impl.ProductoDAOImpl;
+import com.ipartek.formacion.modelo.pojo.Producto;
+
 /**
  * Servlet implementation class ModificarProductoFrontOfficeController
  */
-@WebServlet("/modificar")
+@WebServlet("/views/frontoffice/producto-modificar")
 public class ModificarProductoFrontOfficeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final static Logger LOG = Logger.getLogger(CrearProductoFrontOfficeController.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -21,8 +28,25 @@ public class ModificarProductoFrontOfficeController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		ProductoDAOImpl dao = ProductoDAOImpl.getInstance();
+		Producto p = null;
+		Alerta alerta = null;
+
+		int idProducto = Integer.parseInt(request.getParameter("id"));
+
+		try {
+			p = dao.getById(idProducto);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			alerta = new Alerta("warning", "No se ha podido recuperar el producto.");
+
+		} finally {
+			request.setAttribute("producto", p);
+			request.setAttribute("alerta", alerta);
+		}
+
+		request.getRequestDispatcher("formulario.jsp").forward(request, response);
 	}
 
 	/**
