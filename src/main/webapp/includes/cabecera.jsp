@@ -81,11 +81,7 @@
                     
           </ul>
        
-        
          <span class="form-inline">
-         
-         	
-         
          	<c:if test="${ empty sessionScope.usuario_login }">
             	  <a class="nav-link  btn btn-outline-warning" href="views/login.jsp">Iniciar Sesión</a>
             </c:if>	  
@@ -95,14 +91,12 @@
             	<a class="nav-link  btn btn-outline-light" href="views/frontoffice/inicio">Mi Panel</a>
             	<a class="nav-link  btn btn-outline-light" href="logout">Cerrar Sesión</a>
             </c:if>
-              
          </span>
         
         </div>
       </nav>
       
       <main role="main" class="container">
-      
       	
       	<%@ include file="alerta.jsp" %>
       	<!-- 

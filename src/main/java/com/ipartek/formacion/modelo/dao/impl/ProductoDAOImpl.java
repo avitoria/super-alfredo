@@ -13,6 +13,7 @@ import com.ipartek.formacion.modelo.dao.ProductoDAO;
 import com.ipartek.formacion.modelo.pojo.Categoria;
 import com.ipartek.formacion.modelo.pojo.Producto;
 import com.ipartek.formacion.modelo.pojo.ResumenUsuario;
+import com.ipartek.formacion.seguridad.SeguridadException;
 
 public class ProductoDAOImpl implements ProductoDAO {
 
@@ -63,12 +64,17 @@ public class ProductoDAOImpl implements ProductoDAO {
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
 			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND p.id = ?";
 
+	private final String SQL_GET_BY_ID_PRODUCTO_ID_USUARIO = "SELECT " + "	 p.id     'producto_id', "
+			+ "	 p.nombre 'producto_nombre', " + "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', "
+			+ "	 c.nombre 'categoria_nombre'	" + " FROM producto p , categoria c "
+			+ " WHERE p.id_categoria  = c.id AND p.id = ? AND p.id_usuario = ?";
+
 	private final String SQL_VIEW_RESUMEN_USUARIO = "SELECT id_usuario, aprobados, pendientes FROM v_usuario_productos WHERE id_usuario = ?";
 
 	// excuteUpdate => int numero de filas afectadas
 	private final String SQL_INSERT = "INSERT INTO producto (nombre, imagen, precio , id_usuario, id_categoria ) VALUES (?, ?, ?, ?, ?)";
 	private final String SQL_UPDATE = "UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ? WHERE id = ?";
-
+	private final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ?, fecha_validado = NULL WHERE id = ?";
 	private final String SQL_DELETE = "DELETE FROM producto WHERE id = ?";
 
 	@Override
@@ -139,10 +145,12 @@ public class ProductoDAOImpl implements ProductoDAO {
 	public ArrayList<Producto> getLast(int numReg) {
 
 		ArrayList<Producto> registros = new ArrayList<Producto>();
+
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareStatement(SQL_GET_LAST);) {
 			pst.setInt(1, numReg);
 			LOG.debug(pst);
+
 			try (ResultSet rs = pst.executeQuery()) {
 				while (rs.next()) {
 					registros.add(mapper(rs));
@@ -152,6 +160,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 		} catch (Exception e) {
 			LOG.error(e);
 		}
+
 		return registros;
 	}
 
@@ -177,7 +186,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 
 	@Override
 	public Producto getById(int id) throws Exception {
-		Producto registro = new Producto();
+		Producto p = new Producto();
 
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareStatement(SQL_GET_BY_ID);) {
@@ -187,41 +196,82 @@ public class ProductoDAOImpl implements ProductoDAO {
 			ResultSet rs = pst.executeQuery();
 
 			if (rs.next()) {
-
-				registro = mapper(rs);
+				p = mapper(rs);
 
 			} else {
-				throw new Exception("No se puede encontrar registro con id=" + id);
+				throw new Exception("No ha podido encontrar producto con id " + id);
 			}
 
 		}
 
-		return registro;
+		return p;
+	}
+
+	public Producto checkSeguridad(int idProducto, int idUsuario) throws Exception, SeguridadException {
+		Producto p = new Producto();
+
+		try (Connection conexion = ConnectionManager.getConnection();
+				PreparedStatement pst = conexion.prepareStatement(SQL_GET_BY_ID_PRODUCTO_ID_USUARIO);) {
+
+			pst.setInt(1, idProducto);
+			pst.setInt(2, idUsuario);
+			LOG.debug(pst);
+			ResultSet rs = pst.executeQuery();
+
+			if (rs.next()) {
+				p = mapper(rs);
+
+			} else {
+				throw new SeguridadException();
+			}
+		}
+
+		return p;
 	}
 
 	@Override
-	public Producto delete(int id) throws Exception {
+	public Producto delete(int id) throws Exception, SeguridadException {
 
-		// conseguir el producto antes de Eliminar
-		Producto registro = getById(id);
+		Producto producto = getById(id);
 
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareStatement(SQL_DELETE);
 
 		) {
-
 			pst.setInt(1, id);
 			LOG.debug(pst);
+
 			int affectedRows = pst.executeUpdate();
 
 			if (affectedRows != 1) {
-				throw new Exception("No se puedo eliminar el registro id = " + id);
+				throw new Exception("No se ha podido eliminar el producto " + id);
 			}
+		}
 
-		} // try
-
-		return registro;
+		return producto;
 	}
+
+	/*
+	 * public Producto delete(int idProducto, int idUsuario) throws Exception {
+	 * 
+	 * Producto producto = null;
+	 * 
+	 * try (Connection conexion = ConnectionManager.getConnection();
+	 * PreparedStatement pst = conexion.prepareStatement(SQL_DELETE);
+	 * 
+	 * ) { // Si no encuentra el producto para ese usuario, lanza una excepción y no
+	 * // ejecuta la siguiente línea producto = checkSeguridad(idProducto,
+	 * idUsuario);
+	 * 
+	 * pst.setInt(1, idProducto);
+	 * 
+	 * LOG.debug(pst); int affectedRows = pst.executeUpdate();
+	 * 
+	 * if (affectedRows != 1) { throw new
+	 * Exception("No se ha podido eliminar el producto con id " + idProducto); } }
+	 * 
+	 * return producto; }
+	 */
 
 	@Override
 	public Producto insert(Producto pojo) throws Exception {
@@ -259,27 +309,51 @@ public class ProductoDAOImpl implements ProductoDAO {
 	}
 
 	@Override
-	public Producto update(Producto pojo) throws Exception {
+	public Producto update(Producto producto) throws Exception {
 
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareStatement(SQL_UPDATE);
 
 		) {
-
-			pst.setString(1, pojo.getNombre());
-			pst.setString(2, pojo.getImagen());
-			pst.setFloat(3, pojo.getPrecio());
-			pst.setInt(4, pojo.getCategoria().getId());
-			pst.setInt(5, pojo.getId());
+			pst.setString(1, producto.getNombre());
+			pst.setString(2, producto.getImagen());
+			pst.setFloat(3, producto.getPrecio());
+			pst.setInt(4, producto.getCategoria().getId());
+			pst.setInt(5, producto.getId());
 			LOG.debug(pst);
+
 			int affectedRows = pst.executeUpdate();
+
 			if (affectedRows != 1) {
-				throw new Exception("No se puede podificar el registro con id=" + pojo.getId());
+				throw new Exception("No se ha podido modificar el producto " + producto.getId());
 			}
 
 		}
 
-		return pojo;
+		return producto;
+	}
+
+	@Override
+	public Producto updateByUser(Producto producto) throws Exception, SeguridadException {
+		try (Connection conexion = ConnectionManager.getConnection();
+				PreparedStatement pst = conexion.prepareStatement(SQL_UPDATE_BY_USER);
+
+		) {
+			pst.setString(1, producto.getNombre());
+			pst.setString(2, producto.getImagen());
+			pst.setFloat(3, producto.getPrecio());
+			pst.setInt(4, producto.getCategoria().getId());
+			pst.setInt(5, producto.getId());
+			LOG.debug(pst);
+
+			int affectedRows = pst.executeUpdate();
+
+			if (affectedRows != 1) {
+				throw new Exception("No se ha podidio modificar el producto " + producto.getId());
+			}
+		}
+
+		return producto;
 	}
 
 	@Override

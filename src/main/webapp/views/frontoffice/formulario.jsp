@@ -6,7 +6,7 @@
     
 <h2>Añadir nuevo producto:</h2>
 
-<form action="views/frontoffice/crear-producto" method="post">
+<form action="views/frontoffice/guardar-producto" method="post">
 
 	<div class="form-group">
 		<label for="id">Id:</label>
@@ -15,22 +15,22 @@
 	
 	<div class="form-group">
 		<label for="nombre">Nombre:</label>
-		<input type="text" class="form-control" name="nombre" id="nombre" value="${producto.nombre}" placeholder="Escribe el nombre del producto" ${(guardado eq true) ? "readonly" : ""}>
+		<input type="text" class="form-control" name="nombre" id="nombre" value="${producto.nombre}" placeholder="Escribe el nombre del producto">
 	</div>
 	
 	<div class="form-group">
 		<label for="precio">Precio:</label>
-		<input type="text" class="form-control" name="precio" id="precio" value="${producto.precio}" placeholder="0.0 €" ${(guardado eq true) ? "readonly" : ""}>
+		<input type="text" class="form-control" name="precio" id="precio" value="${producto.precio}" placeholder="0.0 €">
 	</div>
 	
 	<div class="form-group">
 		<label for="imagen">Imagen:</label>
-		<input type="text" class="form-control" name="imagen" id="imagen" value="${producto.imagen}" placeholder="URL de la imagen (.jpg o .png)" ${(guardado eq true) ? "readonly" : ""}>
+		<input type="text" class="form-control" name="imagen" id="imagen" value="${producto.imagen}" placeholder="URL de la imagen (.jpg o .png)">
 	</div>
 	
 	<div class="form-group">
 		<label for="categoria_id">Categoria:</label>
-		<select class="custom-select" name="categoria_id" id="categoria_id">
+		<select class="custom-select" name="idCategoria" id="idCategoria">
 			<c:forEach items="${categorias}" var="categoria">
 				<option value="${categoria.id}" ${(categoria.id eq producto.categoria.id) ? "selected" : ""}>${categoria.nombre}</option>
 			</c:forEach>					  					  

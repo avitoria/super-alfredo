@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.ipartek.formacion.modelo.CrudAble;
 import com.ipartek.formacion.modelo.pojo.Producto;
 import com.ipartek.formacion.modelo.pojo.ResumenUsuario;
+import com.ipartek.formacion.seguridad.SeguridadException;
 
 /**
  * Hereda los metodos basicos de la interfaz CrudAble Ademas definie un nuevo:
@@ -67,6 +68,20 @@ public interface ProductoDAO extends CrudAble<Producto> {
 	 */
 	ArrayList<Producto> getAllRangoPrecio(int precioMinimo, int precioMaximo) throws Exception;
 
+	/**
+	 * 
+	 * @param idUsuario
+	 * @return
+	 */
 	ResumenUsuario getResumenByUsuario(int idUsuario);
+
+	/**
+	 * 
+	 * @param p
+	 * @return
+	 * @throws Exception
+	 * @throws SeguridadException
+	 */
+	Producto updateByUser(Producto p) throws Exception, SeguridadException;
 
 }
