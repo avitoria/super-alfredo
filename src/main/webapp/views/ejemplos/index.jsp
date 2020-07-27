@@ -38,14 +38,11 @@
 <a href="formulario-producto.jsp">Crear Producto</a>
 <br>
 <a href="views/ejemplos/apartadoA.jsp">Apartado A - Cookies</a>
-
 <br>
 <a href="views/ejemplos/cookies.jsp">Cookies</a>
 <br>
-
 <a href="views/ejemplos/custom-tag.jsp">TAG propio</a>
 <br>
-
 
 
 <%@include file="../../includes/pie.jsp" %>

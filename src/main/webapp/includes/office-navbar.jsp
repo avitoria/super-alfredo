@@ -40,7 +40,6 @@
                 </nav>
             </div>
             
-            
             <!-- CONTENIDO PRINCIPAL -->
              <div id="layoutSidenav_content">
                 <main>
