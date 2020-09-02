@@ -19,30 +19,43 @@
                                 <div class="sb-nav-link-icon"><i class="fa fa-globe"></i></div>
                                 Inicio
                             </a>
-                            <a class="nav-link" href="views/frontoffice/inicio">
+                            <a class="nav-link" href="views/backoffice/inicio">
                                 <div class="sb-nav-link-icon"><i class="fa fa-tachometer-alt"></i></div>
                                 Mi Panel
                             </a>
-                            <a class="nav-link" href="views/frontoffice/productos">
+                            <a class="nav-link" href="views/backoffice/productos">
                                 <div class="sb-nav-link-icon"><i class="fa fa-check-square-o"></i></div>
                                 Productos
                             </a>
-                            <a class="nav-link" href="views/frontoffice/productos?validados=0">
+                            <a class="nav-link" href="#">
                                 <div class="sb-nav-link-icon"><i class="fa fa-check-circle-o"></i></div>
-                                Pendientes Validar
+                                Usuarios
                             </a>
-                            <a class="nav-link" href="views/frontoffice/guardar-producto?id=0">
+                            <a class="nav-link" href="views/backoffice/categoria">
                                 <div class="sb-nav-link-icon"><i class="fa fa-plus-circle"></i></div>
-                                Crear Producto
+                                Categorias
+                            </a>
+                             <a class="nav-link" href="views/backoffice/migracion">
+                                <div class="sb-nav-link-icon"><i class="fa fa-plus-circle"></i></div>
+                                Lanzar Proceso Migración
+                            </a>
+                             <a class="nav-link" href="views/backoffice/crawler">
+                                <div class="sb-nav-link-icon"><i class="fa fa-plus-circle"></i></div>
+                                Parsear Web
                             </a>
                          </div>   
                     </div>       
                 </nav>
             </div>
             
+            
             <!-- CONTENIDO PRINCIPAL -->
              <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid pt-3">
+                    
+                    
                     	<%@ include file="alerta.jsp" %>
+				    
+                    
             

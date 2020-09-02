@@ -303,6 +303,11 @@ public class ProductoDAOImpl implements ProductoDAO {
 			} else {
 				throw new Exception("No se ha podido guardar el registro " + pojo);
 			}
+
+		} catch (Exception e) {
+			// Si capturamos la excepción aquí, nunca se lanza hacia fuera y el controlador
+			// no sabe qué ha pasado
+			e.printStackTrace();
 		}
 
 		return pojo;

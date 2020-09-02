@@ -43,7 +43,7 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 			throws ServletException, IOException {
 		Producto producto = null;
 		Usuario usuario = null;
-		String view = "";
+		String view = "formulario.jsp";
 
 		int idProducto = Integer.parseInt(request.getParameter("id"));
 
@@ -54,9 +54,6 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 		try {
 			if (idProducto != 0) {
 				producto = daoProducto.checkSeguridad(idProducto, idUsuario);
-
-				// Le enviamos al formulario
-				view = "formulario.jsp";
 			}
 
 		} catch (SeguridadException e) {

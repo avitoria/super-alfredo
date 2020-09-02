@@ -1,4 +1,4 @@
-package com.ipartek.formacion.listenner;
+package com.ipartek.formacion.listener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -11,13 +11,13 @@ import com.ipartek.formacion.controller.Alerta;
 import com.ipartek.formacion.modelo.dao.impl.CategoriaDAOImpl;
 
 /**
- * Application Lifecycle Listener implementation class InicioAppListenner
+ * Application Lifecycle Listener implementation class InicioAppListener
  *
  */
 @WebListener
-public class InicioAppListenner implements ServletContextListener {
+public class InicioAppListener implements ServletContextListener {
 
-	private final static Logger LOG = Logger.getLogger(InicioAppListenner.class);
+	private final static Logger LOG = Logger.getLogger(InicioAppListener.class);
 	static private final CategoriaDAOImpl categoriaDAO = CategoriaDAOImpl.getInstance();
 
 	/**

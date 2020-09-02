@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -61,13 +64,24 @@ public class MigracionBackOfficeController extends HttpServlet {
 				if (campos.length == 6) {
 					pst.setString(1, campos[0]);
 					pst.setString(2, campos[1]);
-					pst.setString(3, campos[2]);
+					// pst.setString(3, campos[2]);
+
+					SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
+					Date fecha = sdf.parse(campos[2]);
+					pst.setObject(3, fecha); // con setDate casca, porque pasamos un java.util.Date pero hay que pasar
+												// java.sql.Date, pero si hacemos setObject parece que cuela
+
 					pst.setString(4, campos[3]);
 					pst.setString(5, campos[4]);
 					pst.setString(6, campos[5]);
 
-					pst.executeUpdate();
-					numInsert++;
+					try {
+						pst.executeUpdate();
+						numInsert++;
+
+					} catch (Exception e) {
+						numErrores++;
+					}
 
 				} else {
 					numErrores++;
@@ -92,7 +106,7 @@ public class MigracionBackOfficeController extends HttpServlet {
 			request.getRequestDispatcher("resumen-migracion.jsp").forward(request, response);
 		}
 
-		LOG.trace("Inicio");
+		LOG.trace("Fin");
 	}
 
 	/**

@@ -14,7 +14,7 @@
 	<div class="row pb-4">
 	
 		<div class="col">
-				<form action="producto" method="post">
+				<form action="guardar-producto" method="post">
 			
 				<div class="form-group">
 					<label for="id">id:</label>
