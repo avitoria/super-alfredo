@@ -6,7 +6,7 @@
     
 <h2>Añadir nuevo producto:</h2>
 
-<form action="views/frontoffice/guardar-producto" method="post">
+<form action="views/frontoffice/guardar-producto" method="post" enctype="multipart/form-data">
 
 	<div class="form-group">
 		<label for="id">Id:</label>
@@ -25,7 +25,8 @@
 	
 	<div class="form-group">
 		<label for="imagen">Imagen:</label>
-		<input type="text" class="form-control" name="imagen" id="imagen" value="${producto.imagen}" placeholder="URL de la imagen (.jpg o .png)">
+		<!--  <input type="text" class="form-control" name="imagen" id="imagen" value="${producto.imagen}" placeholder="URL de la imagen (.jpg o .png)"> -->
+		<input type="file" name="fichero">
 	</div>
 	
 	<div class="form-group">

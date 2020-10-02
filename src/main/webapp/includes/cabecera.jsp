@@ -59,7 +59,7 @@
 		        </div>
 		    </li>
             
-            <li class="nav-item"  >
+            <li class="nav-item">
               <a class="nav-link ${ ( 'ejemplos' eq param.pagina ) ? 'active' : '' }" href="views/ejemplos/index.jsp">Ejemplos</a>
             </li>
             
@@ -77,8 +77,11 @@
               		<a class="nav-link ${ ( 'usuario' eq param.pagina ) ? 'active' : '' } "  href="usuario">Usuarios</a>
             	</li>
             	
-            </c:if>	  
-                    
+            </c:if>
+            
+            <li class="nav-item">
+            	<a class="nav-link" href="doc/index.html">Documentación</a>
+            </li>
           </ul>
        
          <span class="form-inline">

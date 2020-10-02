@@ -23,6 +23,8 @@
 		</div>
 		
 		<input type="submit" value="Iniciar Sesión" class="btn btn-primary btn-block">
+		
+		<p><a href="views/usuarios/form-usuario.jsp">Registrarse</a></p>
 	
 	</form>
 	

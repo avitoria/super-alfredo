@@ -20,6 +20,12 @@ public class Categoria {
 		this.id = id;
 	}
 
+	public Categoria(int id, String nombre) {
+		this();
+		this.id = id;
+		this.nombre = nombre;
+	}
+
 	public int getId() {
 		return id;
 	}

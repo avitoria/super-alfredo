@@ -6,28 +6,77 @@ import com.ipartek.formacion.modelo.CrudAble;
 import com.ipartek.formacion.modelo.pojo.Usuario;
 
 public interface UsuarioDAO extends CrudAble<Usuario> {
-	
+
 	/**
-	 * Busca alumnos que contengan la palabraBuscada
-	 * @param palabraBuscada palabra a buscar
-	 * @return ArrayList<Alumno>
+	 * Devuelve un listado de todos los usuarios con sus roles (sin productos)
 	 * 
-	 * Ej: si palabraBuscada = "a"   <br>
-	 *     lista [ "ander", "pepe", "manolo"] <br>
-	 *     retorna ["ander","manolo"] <br>
-	 *     
-	 *  SQL = SELECT id, nombre FROM alumno WHERE nombre LIKE '%a%' ORDER BY nopmbre ASC;   
+	 * @return {@code ArrayList<Usuario>} si no encuentra nada, devuelve un
+	 *         ArrayList vacío
+	 */
+	ArrayList<Usuario> getAll();
+
+	/**
+	 * Busca un usuario por su id (sin productos)
+	 * 
+	 * @param id int id del usuario que buscamos
+	 * @return objeto Usuario correspondiente al usuario buscado
+	 * @throws Exception si no encuentra ningún usuario con el id indicado
+	 */
+	Usuario getById(int id) throws Exception;
+
+	/**
+	 * Devuelve los usaurios con un nombre similar al indicado
+	 * 
+	 * @param palabraBuscada String nombre que queremos buscar
+	 * @return registros ArrayList<Usuario> ArrayList de objetos Usuario con los
+	 *         usuarios encontrados
+	 */
+	ArrayList<Usuario> getAllByNombre(String palabraBuscada);
+
+	/**
+	 * Comprueba si el nombre de usuario existe en la BDD
+	 * 
+	 * @param nombre String nombre de usuario
+	 * @return true si el nombre existe; false si no existe
+	 */
+	boolean getByName(String nombre);
+
+	/**
+	 * Comprueba si una combinación usuario/password existe en la BDD
+	 * 
+	 * @param nombre   String nombre del usuario
+	 * @param password String password del usaurio
+	 * @return Usuario el usuario en caso de la combinación exista
+	 * @throws Exception si la combinación no existe
+	 */
+	Usuario existe(String nombre, String password);
+
+	/**
+	 * Inserta un nuevo usuario
+	 * 
+	 * @param pojo Usuario usuario a insertar
+	 * @return pojo Usuario usuario insertado con el id autogenerado
+	 * @throws Exception si no se ha insertado el usuario
 	 * 
 	 */
-	ArrayList<Usuario> getAllByNombre( String palabraBuscada );
-	
-	
+	Usuario insert(Usuario pojo) throws Exception;
+
 	/**
-	 * Busca si existe el usuario en la base datsos
-	 * @param nombre String nombre del usuario
-	 * @param password String contraseña para acceder, cuidado que esta cifrada en MD5
-	 * @return Usuario con datos si lo encuentra, si no existe retorna null
+	 * Elimina el usuario por su id
+	 * 
+	 * @param id int id del usuario que quieremos eliminar
+	 * @return objeto Usuario correspondiente al usuario eliminado
+	 * @throws Exception si no encuentra el usuario con el id indicado
 	 */
-	Usuario existe ( String nombre, String password ); 
-	
+	Usuario delete(int id) throws Exception;
+
+	/**
+	 * Actualiza los datos de un usuario
+	 * 
+	 * @param pojo Usuario usuario a actualizar
+	 * @return pojo Usuario usuario actualizado
+	 * @throws Exception si no existe el usuario a actualizar
+	 * 
+	 */
+	Usuario update(Usuario pojo) throws Exception;
 }

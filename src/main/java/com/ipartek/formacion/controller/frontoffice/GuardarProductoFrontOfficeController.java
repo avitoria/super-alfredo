@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -34,6 +35,7 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 	private final static ProductoDAOImpl daoProducto = ProductoDAOImpl.getInstance();
 	private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private static Validator validator = factory.getValidator();
+	private static String PATH_FICHERO = "/home/javaee/eclipse-workspace/super-alfredo/src/main/webapp/imagenes/";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -92,7 +94,8 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 		int idProducto = Integer.parseInt(request.getParameter("id"));
 		String nombre = request.getParameter("nombre");
 		float precio = Float.parseFloat(request.getParameter("precio"));
-		String imagen = request.getParameter("imagen");
+		// String imagen = request.getParameter("imagen");
+		Part filePart = request.getPart("fichero");
 		int idCategoria = Integer.parseInt(request.getParameter("idCategoria"));
 
 		try {
@@ -106,7 +109,8 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 			producto = new Producto();
 			producto.setId(idProducto);
 			producto.setNombre(nombre);
-			producto.setImagen(imagen);
+			String nomFichero = filePart.getSubmittedFileName();
+			producto.setImagen("imagenes/" + nomFichero);
 			producto.setPrecio(precio);
 			producto.setCategoria(new Categoria(idCategoria));
 			producto.setUsuario(usuario);
