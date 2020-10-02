@@ -28,7 +28,7 @@
 			<input type="password" name="repass" id="repass" value="" class="form-control" >
 		</div>
 				
-		<input type="submit" value="Enviar" class="btn btn-primary btn-block">
+		<input type="submit" id="btnLogin" disabled="disabled" value="Enviar" class="btn btn-primary btn-block">
 		
 	</form>
 

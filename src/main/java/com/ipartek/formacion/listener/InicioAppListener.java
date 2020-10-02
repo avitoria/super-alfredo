@@ -40,7 +40,6 @@ public class InicioAppListener implements ServletContextListener {
 		ServletContext contextoAplicacion = sce.getServletContext();
 
 		try {
-
 			contextoAplicacion.setAttribute("usuarios_conectados", 0);
 			contextoAplicacion.setAttribute("categorias", categoriaDAO.getAll());
 

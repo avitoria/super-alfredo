@@ -40,11 +40,11 @@ function cifrar() {
 function confirmar(nombre) {
 	
 	// The confirm() method returns true if the user clicked "OK", and false otherwise. 
-	if ( confirm('¿ Estas seguro que quires eliminar ' + nombre + ' ?') ){
+	if (confirm('¿ Estas seguro que quires eliminar ' + nombre + ' ?')) {
 		
 		console.debug(' continua el evento por defceto del ancla ');
 		
-	}else {
+	} else {
 		console.debug(' prevenimos o detenemos el evento del ancla ');
 		event.preventDefault();
 	}
@@ -74,21 +74,25 @@ function buscarUsuario(event) {
 	xhttp.onreadystatechange = function() {     
 		
 		let elNombreHelp = document.getElementById('nombreHelp');
+		let elBtnLogin = document.getElementById('btnLogin');
 		
 	    if (this.readyState == 4 && this.status == 200) {            
 	       elNombreHelp.innerHTML = 'Nombre no disponible';
 		   elNombreHelp.classList.add('text-danger');
 		   elNombreHelp.classList.remove('text-success');
+		   elBtnLogin.setAttribute('disabled','disabled');
 	    }
 
 		if (this.readyState == 4 && this.status == 204) {
 		   elNombreHelp.innerHTML = 'Nombre disponible';
 		   elNombreHelp.classList.add('text-success');
 		   elNombreHelp.classList.remove('text-danger');
+		   elBtnLogin.removeAttribute('disabled');
 		}
 		
 		if (nombre == "") {
 			elNombreHelp.innerHTML = '';
+			elBtnLogin.setAttribute('disabled','disabled');
 		}
 
 

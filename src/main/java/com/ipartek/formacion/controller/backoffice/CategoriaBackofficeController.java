@@ -90,7 +90,7 @@ public class CategoriaBackofficeController extends HttpServlet {
 			// para hacer el forward pierde la utima parte de la url "categoria" y debemos
 			// añadir la caroeta donde esta la index de las categorias
 			// /views/backoffice/ + categoria/index.jsp
-			request.getRequestDispatcher("categoria/index.jsp").forward(request, response);
+			request.getRequestDispatcher(VIEW_LISTA).forward(request, response);
 		}
 	}
 

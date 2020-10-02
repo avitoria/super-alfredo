@@ -35,7 +35,6 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 	private final static ProductoDAOImpl daoProducto = ProductoDAOImpl.getInstance();
 	private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private static Validator validator = factory.getValidator();
-	private static String PATH_FICHERO = "/home/javaee/eclipse-workspace/super-alfredo/src/main/webapp/imagenes/";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
