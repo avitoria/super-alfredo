@@ -1,3 +1,11 @@
+/**
+ * Controlador que gestiona las altas y actualizaciones de los productos
+ * 
+ * @author alfredo
+ * @version 1.0
+ * 
+ */
+
 package com.ipartek.formacion.controller;
 
 import java.io.IOException;
@@ -34,8 +42,9 @@ public class ProductoGuardarController extends HttpServlet {
 	private static Validator validator = factory.getValidator();
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Obtiene el producto que queremos modificar y carga sus datos en el formulario
+	 * 
+	 * Atributos: id del producto Parámetros: producto encontrado
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -54,21 +63,22 @@ public class ProductoGuardarController extends HttpServlet {
 			request.setAttribute("producto", producto);
 
 		} catch (Exception e) {
-
 			e.printStackTrace();
 
 		} finally {
-
 			request.setAttribute("categorias", daoCategoria.getAll());
-			// ir a la nueva vista o jsp
 			request.getRequestDispatcher("views/productos/formulario.jsp").forward(request, response);
 		}
 
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Recoge los datos del formulario de alta/actualización. Si el id es 0, se
+	 * procesa el alta. Si es distinto de 0, se procesa la actualización.
+	 * 
+	 * Parámetros: campos del formulario (id, nombre, precio, imagen, categoria_id)
+	 * Atributos: alerta que muestra el resultado de la operación; producto
+	 * creado/actualizado
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -77,8 +87,6 @@ public class ProductoGuardarController extends HttpServlet {
 		Producto producto = new Producto();
 
 		try {
-
-			// recoger los valores del formulario
 			String idParametro = request.getParameter("id");
 			String nombre = request.getParameter("nombre");
 			String precio = request.getParameter("precio");
@@ -100,7 +108,9 @@ public class ProductoGuardarController extends HttpServlet {
 
 			Set<ConstraintViolation<Producto>> violations = validator.validate(producto);
 
-			if (violations.isEmpty()) { // sin errores de validacion, podemos guardar en bbd
+			if (violations.isEmpty()) {
+				// No hay errores de validación. Realizamos el alta o la actualización.
+
 				if (id == 0) {
 					daoProducto.insert(producto);
 
@@ -110,7 +120,9 @@ public class ProductoGuardarController extends HttpServlet {
 
 				alerta = new Alerta("success", "Producto guardado con exito");
 
-			} else { // tenemos errores de validacion
+			} else {
+				// Hay errores de validación
+
 				String errores = "";
 
 				for (ConstraintViolation<Producto> v : violations) {
@@ -118,24 +130,22 @@ public class ProductoGuardarController extends HttpServlet {
 				}
 
 				alerta = new Alerta("danger", errores);
-
 			}
 
 		} catch (SQLException e) {
-			alerta = new Alerta("danger", "Lo sentimos pero ya existe ese NOMBRE, escribe otro por favor ");
+			alerta = new Alerta("danger",
+					"Ya existe un producto con ese nombre. Por favor, elija un nombre diferente.");
 			e.printStackTrace();
 
 		} catch (Exception e) {
-			alerta = new Alerta("danger", "Lo sentimos pero hemos tenido un ERROR inxesperado ");
+			alerta = new Alerta("danger", "Se ha producido un error. Por favor, vuelva a intentarlo más tade.");
 			e.printStackTrace();
 
 		} finally {
-			// enviar datos a la vista
 			request.setAttribute("alerta", alerta);
 			request.setAttribute("producto", producto);
 			request.setAttribute("categorias", daoCategoria.getAll());
 
-			// ir a la nueva vista o jsp
 			request.getRequestDispatcher("views/productos/formulario.jsp").forward(request, response);
 		}
 

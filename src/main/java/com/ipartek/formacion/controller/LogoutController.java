@@ -17,67 +17,64 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String idioma = "es";
 		String mensaje = "";
-		
-		// recuperar cookie de Idioma para mensaje de salida		
+
+		// recuperar cookie de Idioma para mensaje de salida
 		Cookie[] cookies = request.getCookies();
-		if ( cookies != null ) {
-			for ( Cookie c : cookies ) {			
-				if ( "cIdioma".equals(c.getName()) ) {   // cookie encontrada
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if ("cIdioma".equals(c.getName())) { // cookie encontrada
 					idioma = c.getValue();
 					break;
-				}			
+				}
 			}
-		}	
-			
+		}
+
 		switch (idioma) {
 		case "es":
-			mensaje = "Adios nos vemos pronto";
+			mensaje = "¡Hasta pronto!";
 			break;
-			
+
 		case "eu":
-			mensaje = "Agur eta ohore";
-			break;	
+			mensaje = "Laster arte!";
+			break;
 
 		default:
-			mensaje = "You are wellcome to the hell";
+			mensaje = "See you soon!";
 			break;
 		}
-	
-		
-		request.setAttribute("alerta", new Alerta("success", mensaje ));
 
-		
+		request.setAttribute("alerta", new Alerta("success", mensaje));
+
 		// ATENCIION hacer lo ultimo, no antes de trabajar con las cookies
 		HttpSession session = request.getSession();
 		session.invalidate();
 		session = null;
-		
-		
-		//usuarios conectados recuperar y actualizar
+
+		// usuarios conectados recuperar y actualizar
 		ServletContext sc = request.getServletContext();
-		int usuariosConectados = (int)sc.getAttribute("usuarios_conectados");
+		int usuariosConectados = (int) sc.getAttribute("usuarios_conectados");
 		sc.setAttribute("usuarios_conectados", --usuariosConectados);
-		
-		
+
 		request.getRequestDispatcher("index.jsp").forward(request, response);
-		
-		
+
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

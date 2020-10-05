@@ -1,4 +1,4 @@
- 		<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+ 		<nav class="sb-topnav navbar navbar-expand navbar-dark" style="background-color: #7952b3;">
             <a class="navbar-brand" href="views/frontoffice/inicio">Mi Panel</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>          
             <!-- Navbar-->
@@ -14,7 +14,6 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            
                             <a class="nav-link" href="inicio">
                                 <div class="sb-nav-link-icon"><i class="fa fa-globe"></i></div>
                                 Inicio
@@ -38,10 +37,6 @@
                              <a class="nav-link" href="views/backoffice/migracion">
                                 <div class="sb-nav-link-icon"><i class="fa fa-plus-circle"></i></div>
                                 Lanzar Proceso Migración
-                            </a>
-                             <a class="nav-link" href="views/backoffice/crawler">
-                                <div class="sb-nav-link-icon"><i class="fa fa-plus-circle"></i></div>
-                                Parsear Web
                             </a>
                          </div>   
                     </div>       

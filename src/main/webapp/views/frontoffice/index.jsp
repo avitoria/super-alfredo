@@ -29,11 +29,5 @@
 	</div>
 	
 </div>
-                        
-<h2>Mis Datos</h2>
-
-<div class="row">
-	${usuario_login}
-</div>
 
 <jsp:include page="../../includes/office-footer.jsp" />                  

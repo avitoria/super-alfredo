@@ -41,6 +41,7 @@ public class LoginController extends HttpServlet {
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
 		String idioma = request.getParameter("idioma");
+		String mensaje = "";
 
 		// crear cookie de idioma
 		Cookie cIdioma = new Cookie("cIdioma", idioma);
@@ -63,7 +64,21 @@ public class LoginController extends HttpServlet {
 			int usuariosConectados = (int) sc.getAttribute("usuarios_conectados");
 			sc.setAttribute("usuarios_conectados", ++usuariosConectados);
 
-			request.setAttribute("alerta", new Alerta("success", "Ongi Etorri, ya estas Logeado"));
+			switch (idioma) {
+			case "es":
+				mensaje = "¡Bienvenido, " + usuario.getNombre() + "!";
+				break;
+
+			case "eu":
+				mensaje = "Ongi etorri, " + usuario.getNombre() + "!";
+				break;
+
+			default:
+				mensaje = "Welcome, " + usuario.getNombre() + "!";
+				break;
+			}
+
+			request.setAttribute("alerta", new Alerta("success", mensaje));
 
 			if (usuario.getRol().getId() == Rol.ADMINISTRADOR) {
 				request.getRequestDispatcher("views/backoffice/inicio").forward(request, response);
@@ -75,7 +90,6 @@ public class LoginController extends HttpServlet {
 		} else {
 			request.setAttribute("alerta", new Alerta("warning", "Credenciales Incorrectas"));
 			request.getRequestDispatcher("views/login.jsp").forward(request, response);
-
 		}
 
 	}

@@ -1,11 +1,14 @@
+/**
+ * Clase para guardar el tipo de alerta y el mensaje a mostrar en la cabecera después de realizar una operación
+ */
+
 package com.ipartek.formacion.controller;
 
 public class Alerta {
 
-	
 	private String tipo;
 	private String texto;
-	
+
 	public Alerta() {
 		super();
 		this.texto = "";
@@ -38,6 +41,5 @@ public class Alerta {
 	public String toString() {
 		return "Alerta [tipo=" + tipo + ", texto=" + texto + "]";
 	}
-	
-	
+
 }

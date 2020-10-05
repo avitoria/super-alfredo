@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import com.ipartek.formacion.seguridad.SeguridadException;
  * Servlet implementation class GuardarProductoFrontOfficeController
  */
 @WebServlet("/views/frontoffice/guardar-producto")
+@MultipartConfig
 public class GuardarProductoFrontOfficeController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -90,6 +92,7 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 		int idUsuario = usuario.getId();
 
 		// Recogemos los campos del formulario
+		// Casca si estamos creando un nuevo producto, porque no hay id
 		int idProducto = Integer.parseInt(request.getParameter("id"));
 		String nombre = request.getParameter("nombre");
 		float precio = Float.parseFloat(request.getParameter("precio"));

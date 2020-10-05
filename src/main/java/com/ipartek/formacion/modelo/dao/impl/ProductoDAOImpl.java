@@ -361,11 +361,6 @@ public class ProductoDAOImpl implements ProductoDAO {
 		return producto;
 	}
 
-	@Override
-	public ArrayList<Producto> getAllRangoPrecio(int precioMinimo, int precioMaximo) throws Exception {
-		throw new Exception("Sin implemntar");
-	}
-
 	private Producto mapper(ResultSet rs) throws SQLException {
 
 		Producto p = new Producto();
