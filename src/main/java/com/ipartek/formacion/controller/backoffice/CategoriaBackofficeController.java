@@ -41,21 +41,17 @@ public class CategoriaBackofficeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		LOG.trace("Listado categorias");
-
 		String idParam = request.getParameter("id");
 		String accionParam = request.getParameter("accion");
 		String forward = VIEW_LISTA;
 
 		try {
 			if (idParam == null) {
-				// Listar
-				// ArrayList<Categoria> listado = dao.getAll();
-				// request.setAttribute("categorias", listado);
+				// Obtener categorías
 				request.setAttribute("categorias", dao.getAll());
 
 			} else if (accionParam != null) {
-				// Eliminar
+				// Eliminar categoría
 				int id = Integer.parseInt(idParam);
 
 				try {
@@ -67,11 +63,11 @@ public class CategoriaBackofficeController extends HttpServlet {
 							"No se ha podido eliminar la categoría, ya que tiene productos asociados."));
 				}
 
-				request.setAttribute("categorias", dao.getAll()); // repetido
+				request.setAttribute("categorias", dao.getAll());
 
 			} else {
-				// Modificar
-				Categoria categoria = null;
+				// Crear/modificar categoría
+				Categoria categoria = new Categoria();
 				int id = Integer.parseInt(idParam); // repetido
 
 				if (id != 0) {
@@ -79,18 +75,14 @@ public class CategoriaBackofficeController extends HttpServlet {
 				}
 
 				request.setAttribute("categoria", categoria);
-				forward = VIEW_FORM;
+				forward = VIEW_FORM; // TODO: redirigir a la lista de categorías
 			}
 
 		} catch (Exception e) {
 			LOG.error(e);
 
 		} finally {
-			// como el controlador escucha en la url "/views/backoffice/categoria"
-			// para hacer el forward pierde la utima parte de la url "categoria" y debemos
-			// añadir la caroeta donde esta la index de las categorias
-			// /views/backoffice/ + categoria/index.jsp
-			request.getRequestDispatcher(VIEW_LISTA).forward(request, response);
+			request.getRequestDispatcher(forward).forward(request, response);
 		}
 	}
 
@@ -101,10 +93,9 @@ public class CategoriaBackofficeController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		LOG.trace("envian datos desde un formulario");
-
 		String pId = request.getParameter("id");
 		String pNombre = request.getParameter("nombre");
+		String forward = VIEW_FORM;
 		Categoria cat = null;
 		Alerta alerta = null;
 
@@ -121,19 +112,22 @@ public class CategoriaBackofficeController extends HttpServlet {
 				try {
 					if (id > 0) {
 						dao.update(cat);
+						alerta = new Alerta("success", "Categoria actualizada correctamente.");
 
 					} else {
 						dao.insert(cat);
+						alerta = new Alerta("success", "Categoria creada correctamente.");
 					}
 
-					alerta = new Alerta("success", "Categoria creada correctamente.");
+					forward = VIEW_LISTA;
+					request.setAttribute("categorias", dao.getAll());
 
 				} catch (Exception e) {
-					alerta = new Alerta("warning", "El nombre de la categoria ya existe, por favor elija otro.");
+					alerta = new Alerta("danger", "El nombre de la categoria ya existe, por favor elija otro.");
 				}
 
 			} else {
-				alerta = new Alerta("warning", "Los datos introducidos no son correctos.");
+				alerta = new Alerta("danger", "Los datos introducidos no son correctos.");
 			}
 
 		} catch (Exception e) {
@@ -141,9 +135,10 @@ public class CategoriaBackofficeController extends HttpServlet {
 			alerta = new Alerta("danger", "Ha habido un error. Por favor, inténtelo de nuevo más tade.");
 
 		} finally {
-			request.setAttribute("categoria", cat);
+			request.setAttribute("categoria", cat); // Guardamos los datos del formulario, por si ha saltado alguna
+													// Exception
 			request.setAttribute("alerta", alerta);
-			request.getRequestDispatcher(VIEW_FORM).forward(request, response);
+			request.getRequestDispatcher(forward).forward(request, response);
 		}
 
 	}

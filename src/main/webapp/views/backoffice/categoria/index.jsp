@@ -6,7 +6,9 @@
 <jsp:include page="../../../includes/office-navbar-admin.jsp" />
     
 <h1>${fn:length(categorias)} Categorías</h1>
-<a href="views/backoffice/categoria?id=0">Nueva categoría</a> 
+
+<!-- <a href="views/backoffice/categoria?id=0">Nueva categoría</a>  -->
+ <a href="views/backoffice/categoria?id=0">Nueva categoría</a>
 	  
 <table class="tabla table table-striped">
 	<thead>
@@ -19,8 +21,8 @@
 	<tbody>
 		<c:forEach items="${categorias}" var="c">
 			<tr>
-				<td>${cat.id}</td>
-				<td>${cat.nombre}</td>					
+				<td>${c.id}</td>
+				<td>${c.nombre}</td>					
 				<td>
 					<a href="views/backoffice/categoria?id=${c.id}" class="mr-4"> <i class="far fa-edit fa-2x" title="Modificar categoría"></i></a>
 					<a href="views/backoffice/categoria?id=${c.id}&accion=delete" onclick="confirmar('${c.nombre}')"><i class="fas fa-trash fa-2x" title="Eliminar categoría"></i></a>

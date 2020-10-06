@@ -44,7 +44,8 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Producto producto = null;
+		// Se crea un nuevo con id = 0 (ver constructor)
+		Producto producto = new Producto();
 		Usuario usuario = null;
 		String view = "formulario.jsp";
 

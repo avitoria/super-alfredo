@@ -3,8 +3,10 @@
 
 <jsp:include page="../../../includes/office-head.jsp" />
 <jsp:include page="../../../includes/office-navbar-admin.jsp" />
-    
-<form action="views/backoffice/categoria" method="post">
+
+<h1>Crear nueva Categoría:</h1>
+
+<form action="views/backoffice/categoria" method="post" class="form-categoria">
 	
 	<div class="form-group">
 		<label for="id">Id:</label>

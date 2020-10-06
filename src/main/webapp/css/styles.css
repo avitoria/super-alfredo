@@ -28,6 +28,13 @@ footer {
     margin: auto;
 }
 
+.form-categoria {
+	width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    margin: auto;
+}
+
 td {
     vertical-align: middle !important;    
 }
