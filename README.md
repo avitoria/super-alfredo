@@ -5,7 +5,7 @@ CMS para gestionar los productos de un supermercado.
 
 Existen dos tipos de perfiles:
 
-1. **Administrador [admin,123456]**: puede crear, actualizar, eliminar y validar cualquier produicto.
+1. **Administrador [admin,123456]**: puede validar productos y crear, modificar y eliminar categorías.
 2. **Usuario [pepe, 123456]**: puede crear, actualizar y eliminar sus productos. La creación y la actualización requieren validación por parte del Administrador para ser visibles en la parte pública
 
 *Las contraseñas estan haseadas en MD5 dentro de la bbdd.*
