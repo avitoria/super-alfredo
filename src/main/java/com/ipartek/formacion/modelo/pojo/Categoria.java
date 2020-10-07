@@ -2,9 +2,12 @@ package com.ipartek.formacion.modelo.pojo;
 
 import java.util.ArrayList;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Categoria {
 
 	private int id;
+	@NotEmpty(message = "Debes indicar el nombre de la categoría.")
 	private String nombre;
 	private ArrayList<Producto> productos;
 

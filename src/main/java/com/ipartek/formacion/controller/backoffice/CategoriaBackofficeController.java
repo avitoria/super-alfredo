@@ -123,16 +123,22 @@ public class CategoriaBackofficeController extends HttpServlet {
 					request.setAttribute("categorias", dao.getAll());
 
 				} catch (Exception e) {
-					alerta = new Alerta("danger", "El nombre de la categoria ya existe, por favor elija otro.");
+					alerta = new Alerta("danger", "El nombre de la categoria ya existe. Por favor, elije otro.");
 				}
 
 			} else {
-				alerta = new Alerta("danger", "Los datos introducidos no son correctos.");
+				String errores = "";
+
+				for (ConstraintViolation<Categoria> v : violations) {
+					errores += "<p><b>" + v.getPropertyPath() + "</b>: " + v.getMessage() + "</p>";
+				}
+
+				alerta = new Alerta("danger", errores);
 			}
 
 		} catch (Exception e) {
 			LOG.error(e);
-			alerta = new Alerta("danger", "Ha habido un error. Por favor, inténtelo de nuevo más tade.");
+			alerta = new Alerta("danger", "Ha habido un error. Por favor, inténtalo de nuevo más tarde.");
 
 		} finally {
 			request.setAttribute("categoria", cat); // Guardamos los datos del formulario, por si ha saltado alguna

@@ -9,16 +9,15 @@ public class Producto {
 
 	private int id;
 
-	@NotBlank
-	@Size(min = 3, max = 100, message = "La longtitud de ser entre 3 y 100 caracteres")
+	@NotBlank(message = "Debes indicar el nombre del producto.")
+	@Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres.")
 	private String nombre;
 
-	@NotBlank(message = "Escribe la url de la imagen")
+	@NotBlank(message = "Debes intorducir la URL de la imagen.")
 	private String imagen;
 
-	@Min(value = 0, message = "Debe ser positivo")
+	@Min(value = 0, message = "El precio debe ser un número mayor o igual a 0.")
 	private float precio;
-	// TODO usuario
 
 	private Categoria categoria;
 

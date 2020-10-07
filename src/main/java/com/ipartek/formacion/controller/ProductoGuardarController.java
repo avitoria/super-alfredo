@@ -110,7 +110,6 @@ public class ProductoGuardarController extends HttpServlet {
 
 			if (violations.isEmpty()) {
 				// No hay errores de validación. Realizamos el alta o la actualización.
-
 				if (id == 0) {
 					daoProducto.insert(producto);
 
@@ -122,7 +121,6 @@ public class ProductoGuardarController extends HttpServlet {
 
 			} else {
 				// Hay errores de validación
-
 				String errores = "";
 
 				for (ConstraintViolation<Producto> v : violations) {

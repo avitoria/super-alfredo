@@ -187,16 +187,16 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
 	@Override
 	public Categoria insert(Categoria pojo) throws Exception {
+
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareCall(SQL_INSERT)) {
-			pst.setString(1, pojo.getNombre()); // IN pNombre VARCHAR(100)
+			pst.setString(1, pojo.getNombre());
 
 			LOG.debug(pst);
 
 			int affectedRows = pst.executeUpdate();
 
 			if (affectedRows == 1) {
-
 				try (ResultSet rsKeys = pst.getGeneratedKeys()) {
 					if (rsKeys.next()) {
 						int id = rsKeys.getInt(1);
@@ -204,13 +204,16 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 					}
 				}
 
-			} else {
-				throw new Exception("No se ha podido crear la categoría " + pojo);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			} /*
+				 * else { throw new Exception("No se ha podido crear la categoría " + pojo); }
+				 */
 		}
+
+		// No capturapturamos la excepción aquí, porque lo haremos en el controlador
+		// CategoriaBackofficeController
+		/*
+		 * catch (Exception e) { e.printStackTrace(); }
+		 */
 
 		return pojo;
 	}

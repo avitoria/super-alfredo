@@ -28,8 +28,8 @@ public interface UsuarioDAO extends CrudAble<Usuario> {
 	 * Devuelve los usaurios con un nombre similar al indicado
 	 * 
 	 * @param palabraBuscada String nombre que queremos buscar
-	 * @return registros ArrayList<Usuario> ArrayList de objetos Usuario con los
-	 *         usuarios encontrados
+	 * @return registros {@code ArrayList<Usuario>} ArrayList de objetos Usuario con
+	 *         los usuarios encontrados
 	 */
 	ArrayList<Usuario> getAllByNombre(String palabraBuscada);
 
@@ -46,8 +46,7 @@ public interface UsuarioDAO extends CrudAble<Usuario> {
 	 * 
 	 * @param nombre   String nombre del usuario
 	 * @param password String password del usaurio
-	 * @return Usuario el usuario en caso de la combinación exista
-	 * @throws Exception si la combinación no existe
+	 * @return Usuario usuario si existe; si no, devuelve null
 	 */
 	Usuario existe(String nombre, String password);
 

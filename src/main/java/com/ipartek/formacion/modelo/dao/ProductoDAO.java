@@ -22,7 +22,7 @@ public interface ProductoDAO extends CrudAble<Producto> {
 	 * @param id id del producto
 	 * 
 	 */
-	void validar(int id);
+	void validar(int id) throws Exception;
 
 	/**
 	 * Obtiene todos los productos que cuyo nombre contiene nombre

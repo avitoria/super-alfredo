@@ -39,6 +39,11 @@ public class ProductoDAOImpl implements ProductoDAO {
 			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL "
 			+ " ORDER BY p.id DESC LIMIT 500";
 
+	private final String SQL_GET_ALL_SIN_VALIDAR = "SELECT " + "	 p.id     'producto_id', "
+			+ "	 p.nombre 'producto_nombre', " + "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', "
+			+ "	 c.nombre 'categoria_nombre'	" + " FROM producto p , categoria c "
+			+ " WHERE p.id_categoria  = c.id AND fecha_validado IS NULL " + " ORDER BY p.id DESC LIMIT 500";
+
 	private final String SQL_GET_LAST = "SELECT " + "	 p.id     'producto_id', " + "	 p.nombre 'producto_nombre', "
 			+ "	 precio, " + "	 imagen, " + "	 c.id     'categoria_id', " + "	 c.nombre 'categoria_nombre'	"
 			+ " FROM producto p , categoria c " + " WHERE p.id_categoria  = c.id AND fecha_validado IS NOT NULL "
@@ -75,12 +80,24 @@ public class ProductoDAOImpl implements ProductoDAO {
 	private final String SQL_INSERT = "INSERT INTO producto (nombre, imagen, precio , id_usuario, id_categoria ) VALUES (?, ?, ?, ?, ?)";
 	private final String SQL_UPDATE = "UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ? WHERE id = ?";
 	private final String SQL_UPDATE_BY_USER = "UPDATE producto SET nombre = ?, imagen = ?, precio = ?, id_categoria = ?, fecha_validado = NULL WHERE id = ?";
+	private final String SQL_VALIDAR = "UPDATE producto SET fecha_validado = NOW() WHERE id = ?";
 	private final String SQL_DELETE = "DELETE FROM producto WHERE id = ?";
 
 	@Override
-	public void validar(int id) {
-		// TODO Auto-generated method stub
-		// UPDATE producto SET fecha_validado = NOW() WHERE id = 15;
+	public void validar(int id) throws Exception {
+
+		try (Connection conexion = ConnectionManager.getConnection();
+				PreparedStatement pst = conexion.prepareStatement(SQL_VALIDAR);) {
+			pst.setInt(1, id);
+			LOG.debug(pst);
+
+			int affectedRows = pst.executeUpdate();
+
+			if (affectedRows != 1) {
+				throw new Exception("No se ha podido validar el producto " + id);
+			}
+
+		}
 	}
 
 	public ArrayList<Producto> getAllByNombre(String nombre) {
@@ -90,26 +107,44 @@ public class ProductoDAOImpl implements ProductoDAO {
 	@Override
 	public ArrayList<Producto> getAll() {
 
-		ArrayList<Producto> registros = new ArrayList<Producto>();
+		ArrayList<Producto> productos = new ArrayList<Producto>();
 
 		try (Connection conexion = ConnectionManager.getConnection();
 				PreparedStatement pst = conexion.prepareStatement(SQL_GET_ALL);
-				ResultSet rs = pst.executeQuery();
-
-		) {
+				ResultSet rs = pst.executeQuery();) {
 
 			LOG.debug(pst);
+
 			while (rs.next()) {
-
-				registros.add(mapper(rs));
-
-			} // while
+				productos.add(mapper(rs));
+			}
 
 		} catch (Exception e) {
 			LOG.error(e);
 		}
 
-		return registros;
+		return productos;
+	}
+
+	public ArrayList<Producto> getAllSinValidar() {
+
+		ArrayList<Producto> productos = new ArrayList<Producto>();
+
+		try (Connection conexion = ConnectionManager.getConnection();
+				PreparedStatement pst = conexion.prepareStatement(SQL_GET_ALL_SIN_VALIDAR);
+				ResultSet rs = pst.executeQuery();) {
+
+			LOG.debug(pst);
+
+			while (rs.next()) {
+				productos.add(mapper(rs));
+			}
+
+		} catch (Exception e) {
+			LOG.error(e);
+		}
+
+		return productos;
 	}
 
 	@Override
@@ -277,9 +312,8 @@ public class ProductoDAOImpl implements ProductoDAO {
 	public Producto insert(Producto pojo) throws Exception {
 
 		try (Connection conexion = ConnectionManager.getConnection();
-				PreparedStatement pst = conexion.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-
-		) {
+				PreparedStatement pst = conexion.prepareStatement(SQL_INSERT,
+						PreparedStatement.RETURN_GENERATED_KEYS);) {
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getImagen());
 			pst.setFloat(3, pojo.getPrecio());
@@ -290,9 +324,6 @@ public class ProductoDAOImpl implements ProductoDAO {
 			int affectedRows = pst.executeUpdate();
 
 			if (affectedRows == 1) {
-
-				// conseguir el ID
-
 				try (ResultSet rsKeys = pst.getGeneratedKeys()) {
 					if (rsKeys.next()) {
 						int id = rsKeys.getInt(1);
@@ -317,9 +348,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 	public Producto update(Producto producto) throws Exception {
 
 		try (Connection conexion = ConnectionManager.getConnection();
-				PreparedStatement pst = conexion.prepareStatement(SQL_UPDATE);
-
-		) {
+				PreparedStatement pst = conexion.prepareStatement(SQL_UPDATE);) {
 			pst.setString(1, producto.getNombre());
 			pst.setString(2, producto.getImagen());
 			pst.setFloat(3, producto.getPrecio());

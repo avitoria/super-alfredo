@@ -93,7 +93,6 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 		int idUsuario = usuario.getId();
 
 		// Recogemos los campos del formulario
-		// Casca si estamos creando un nuevo producto, porque no hay id
 		int idProducto = Integer.parseInt(request.getParameter("id"));
 		String nombre = request.getParameter("nombre");
 		float precio = Float.parseFloat(request.getParameter("precio"));
@@ -145,7 +144,7 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 					errores += "<p><b>" + v.getPropertyPath() + "</b>: " + v.getMessage() + "</p>";
 				}
 
-				alerta = new Alerta("warning", errores);
+				alerta = new Alerta("danger", errores);
 
 				// Devolvemos al usuario al formulario para que corrija los errores
 				view = "formulario.jsp";
@@ -159,7 +158,7 @@ public class GuardarProductoFrontOfficeController extends HttpServlet {
 
 		} catch (Exception e) {
 			LOG.error(e);
-			alerta = new Alerta("warning", "ERROR: ya existe un producto con ese nombre.");
+			alerta = new Alerta("danger", "ERROR: ya existe un producto con ese nombre.");
 
 			// Devolvemos al usuario al formulario para que ponga otro nombre
 			view = "formulario.jsp";
