@@ -62,7 +62,7 @@ function buscarUsuario(event) {
 	console.debug(`valor del input ${nombre}`);
 	
 	//Indicamos la URI del WebService
-	const url = `http://localhost:8080/supermerkado-master/api/usuario?nombre=${nombre}`;
+	const url = `http://localhost:8080/super-alfredo/api/usuario?nombre=${nombre}`;
 	//Llamada Ajax
 	var xhttp = new XMLHttpRequest();
 	//Indicamos el tipo de petición y la URI
@@ -71,7 +71,8 @@ function buscarUsuario(event) {
 	xhttp.send();
 	
 	//Al cambiar el estado, llamamos a la función
-	xhttp.onreadystatechange = function() {     
+	xhttp.onreadystatechange = function() {
+		console.debug(`entra en onreadystatechange`);
 		
 		let elNombreHelp = document.getElementById('nombreHelp');
 		let elBtnLogin = document.getElementById('btnLogin');
